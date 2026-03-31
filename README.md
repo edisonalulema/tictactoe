@@ -2,7 +2,7 @@
 
 ## What this is
 
-A single-player tic-tac-toe game against the computer, built with React, TypeScript, and Vite. Three difficulty levels: easy (mostly random), medium (mix of optimal and random), and hard (unbeatable minimax). No backend, no database, no UI framework, no state management library.
+A single-player tic-tac-toe game against the computer, built with React, TypeScript, and Vite. Three difficulty levels: easy (mostly random), medium (mix of optimal and random), and hard (unbeatable minimax). Neon noir arcade visual style. Game state persists across page reloads via localStorage. No backend, no database, no UI framework, no state management library.
 
 ## Setup
 
@@ -13,7 +13,9 @@ npm run dev
 
 ## How to play
 
-Pick a difficulty on the menu screen to start. You play as X, the computer plays as O. Click an empty cell to place your mark. The computer responds after a short delay. Scores persist across rounds within the session. After a game ends, choose to play again at the same difficulty or return to the menu.
+Pick a difficulty on the menu screen to start. You play as X, the computer plays as O. Click an empty cell to place your mark. The computer responds after a short delay. Scores persist across rounds and across page reloads. After a game ends, choose to play again at the same difficulty or return to the menu.
+
+Close the tab and come back later — your game and scores will be right where you left them. In-progress games resume exactly where they stopped, including mid-turn state: if you reload while the computer is thinking, it will re-evaluate and play its move after the normal delay. The saved state is versioned, so future updates can safely invalidate old saves without breaking the app.
 
 ## Validation
 
@@ -23,7 +25,7 @@ npm run build
 npm run lint
 ```
 
-43 tests cover the pure game engine: all 8 winning lines, draw detection, invalid move handling, easy-mode suboptimality under controlled randomness, and an exhaustive proof that hard mode never loses from any reachable game state.
+70 tests cover the pure game engine and persistence layer: all 8 winning lines, draw detection, invalid move handling, easy-mode suboptimality under controlled randomness, an exhaustive proof that hard mode never loses from any reachable game state, localStorage hydration validation for both valid and corrupt saved states, and schema version mismatch rejection.
 
 ## AI usage
 
@@ -42,3 +44,5 @@ This project was built entirely through iterative prompting with Claude. Each pr
 6. **"Do the component pass"** — Created all presentational components in one focused step after the hook was stable, rather than interleaving structural and visual changes.
 
 7. **"Do a polish pass"** — Saved all visual design, microinteractions, accessibility tightening, and the README for a single final pass, so the architecture was locked before aesthetics entered the picture.
+
+8. **"Add localStorage persistence and a small visual polish pass"** — Combined persistence with targeted visual improvements (CPU thinking state, mark animations, menu presence) because both are experience-level concerns that don't change the architecture.

@@ -6,12 +6,17 @@ interface BoardProps {
   board: BoardState;
   winningLine: readonly number[];
   disabled: boolean;
+  isCpuThinking?: boolean;
   onCellClick: (index: number) => void;
 }
 
-export function Board({ board, winningLine, disabled, onCellClick }: BoardProps) {
+export function Board({ board, winningLine, disabled, isCpuThinking, onCellClick }: BoardProps) {
+  const className =
+    "board" +
+    (isCpuThinking ? " board-thinking" : "");
+
   return (
-    <div className="board" role="grid" aria-label="Tic-tac-toe board">
+    <div className={className} role="grid" aria-label="Tic-tac-toe board">
       {[0, 1, 2].map((row) => (
         <div key={row} className="board-row" role="row">
           {[0, 1, 2].map((col) => {

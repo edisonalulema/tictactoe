@@ -25,6 +25,23 @@
   transition: transform var(--transition-fast);
 }
 
+/* Subtle scale-in when a mark first appears */
+.cell-x .cell-mark,
+.cell-o .cell-mark {
+  animation: mark-appear 0.2s ease-out;
+}
+
+@keyframes mark-appear {
+  from {
+    transform: scale(0.5);
+    opacity: 0.4;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 /* ---- Empty interactive cell ---- */
 
 .cell-empty {

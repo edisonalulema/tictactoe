@@ -2,8 +2,43 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
+  gap: 28px;
+  animation: menu-enter 0.4s ease-out;
 }
+
+@keyframes menu-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- Decorative grid silhouette ---- */
+
+.menu-grid-preview {
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  grid-template-rows: repeat(3, 48px);
+  gap: 4px;
+}
+
+.menu-grid-cell {
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius-sm);
+  background: var(--bg-cell);
+  opacity: 0.5;
+  transition: opacity var(--transition-med);
+}
+
+.menu:hover .menu-grid-cell {
+  opacity: 0.8;
+}
+
+/* ---- Difficulty fieldset ---- */
 
 .menu-difficulty {
   border: none;
@@ -23,10 +58,4 @@
   text-align: center;
   width: 100%;
   margin-bottom: 12px;
-}
-
-.menu-hint {
-  margin-top: 8px;
-  font-size: 0.8rem;
-  color: var(--text-dim);
 }

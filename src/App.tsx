@@ -8,12 +8,16 @@ import { ResultOverlay } from "./components/ResultOverlay";
 
 function App() {
   const game = useGame();
+  const isCpuThinking =
+    game.phase === "playing" && !game.isPlayerTurn;
 
   return (
     <main className="game">
       <h1 className="game-title">Tic-Tac-Toe</h1>
       <LiveAnnouncer message={game.announcement} />
-      <p className="status">{game.status}</p>
+      <p className={"status" + (isCpuThinking ? " status-thinking" : "")}>
+        {game.status}
+      </p>
 
       {game.phase === "menu" && (
         <Menu
@@ -30,6 +34,7 @@ function App() {
             board={game.board}
             winningLine={game.winningLine}
             disabled={game.phase !== "playing" || !game.isPlayerTurn}
+            isCpuThinking={isCpuThinking}
             onCellClick={game.handleCellClick}
           />
         </>

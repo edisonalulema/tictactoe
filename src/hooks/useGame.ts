@@ -1,6 +1,7 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import {
   type Board,
+  type Cell,
   type Player,
   type Difficulty,
   type GameResult,
@@ -46,6 +47,107 @@ export interface GameActions {
 const HUMAN: Player = "X";
 const CPU: Player = "O";
 const CPU_DELAY_MS = 400;
+const STORAGE_KEY = "tic-tac-toe-state";
+const SCHEMA_VERSION = 1;
+
+// ---- Persistence types ----
+
+interface PersistedState {
+  schemaVersion: number;
+  phase: Phase;
+  difficulty: Difficulty;
+  board: Cell[];
+  isPlayerTurn: boolean;
+  scores: Scores;
+}
+
+// ---- Validation helpers (exported for testing) ----
+
+const VALID_PHASES: readonly string[] = ["menu", "playing", "result"];
+const VALID_DIFFICULTIES: readonly string[] = ["easy", "medium", "hard"];
+const VALID_CELLS: readonly (string | null)[] = ["X", "O", null];
+
+export function validateSavedState(raw: unknown): PersistedState | null {
+  if (typeof raw !== "object" || raw === null) return null;
+
+  const obj = raw as Record<string, unknown>;
+
+  // Schema version — reject any version we don't recognize
+  if (obj.schemaVersion !== SCHEMA_VERSION) return null;
+
+  // Phase
+  if (!VALID_PHASES.includes(obj.phase as string)) return null;
+  const phase = obj.phase as Phase;
+
+  // Difficulty
+  if (!VALID_DIFFICULTIES.includes(obj.difficulty as string)) return null;
+  const difficulty = obj.difficulty as Difficulty;
+
+  // Board
+  if (!Array.isArray(obj.board) || obj.board.length !== 9) return null;
+  for (const cell of obj.board) {
+    if (!VALID_CELLS.includes(cell as string | null)) return null;
+  }
+  const board = obj.board as Cell[];
+
+  // isPlayerTurn
+  if (typeof obj.isPlayerTurn !== "boolean") return null;
+  const isPlayerTurn = obj.isPlayerTurn;
+
+  // Scores
+  if (typeof obj.scores !== "object" || obj.scores === null) return null;
+  const s = obj.scores as Record<string, unknown>;
+  if (
+    typeof s.wins !== "number" || s.wins < 0 ||
+    typeof s.losses !== "number" || s.losses < 0 ||
+    typeof s.draws !== "number" || s.draws < 0
+  ) return null;
+  const scores: Scores = {
+    wins: s.wins as number,
+    losses: s.losses as number,
+    draws: s.draws as number,
+  };
+
+  // Cross-field consistency: if phase is "result", board must be terminal.
+  // If phase is "playing" and board is terminal, that's invalid (missed transition).
+  if (phase === "result" && !isTerminal(board)) return null;
+  if (phase === "playing" && isTerminal(board)) return null;
+
+  return { schemaVersion: SCHEMA_VERSION, phase, difficulty, board, isPlayerTurn, scores };
+}
+
+export function loadSavedState(): PersistedState | null {
+  try {
+    const json = localStorage.getItem(STORAGE_KEY);
+    if (!json) return null;
+    const parsed: unknown = JSON.parse(json);
+    const validated = validateSavedState(parsed);
+    if (!validated) {
+      localStorage.removeItem(STORAGE_KEY);
+      return null;
+    }
+    return validated;
+  } catch {
+    localStorage.removeItem(STORAGE_KEY);
+    return null;
+  }
+}
+
+function saveState(state: PersistedState): void {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    // Storage full or unavailable — silently ignore.
+  }
+}
+
+export function clearSavedState(): void {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // Ignore.
+  }
+}
 
 // ---- Helpers ----
 
@@ -61,14 +163,17 @@ function addScore(prev: Scores, result: GameResult | null): Scores {
 // ---- Hook ----
 
 export function useGame(): GameState & GameActions {
-  const [phase, setPhase] = useState<Phase>("menu");
-  const [difficulty, setDifficulty] = useState<Difficulty>("medium");
-  const [board, setBoard] = useState<Board>(emptyBoard());
-  const [isPlayerTurn, setIsPlayerTurn] = useState(true);
-  const [scores, setScores] = useState<Scores>({ wins: 0, losses: 0, draws: 0 });
+  // Load saved state once. useMemo with [] deps runs once on mount and is
+  // safe to read during render (unlike useRef().current which the linter flags).
+  const saved = useMemo(() => loadSavedState(), []);
 
-  // Explicit announcement set by actions. Cleared after game-over announcements
-  // are derived below — only used for action-triggered messages like "Game started".
+  const [phase, setPhase] = useState<Phase>(() => saved?.phase ?? "menu");
+  const [difficulty, setDifficulty] = useState<Difficulty>(() => saved?.difficulty ?? "medium");
+  const [board, setBoard] = useState<Board>(() => saved?.board ?? emptyBoard());
+  const [isPlayerTurn, setIsPlayerTurn] = useState(() => saved?.isPlayerTurn ?? true);
+  const [scores, setScores] = useState<Scores>(() => saved?.scores ?? { wins: 0, losses: 0, draws: 0 });
+
+  // Explicit announcement set by actions.
   const [actionAnnouncement, setActionAnnouncement] = useState("");
 
   // Ref for CPU timeout — enables cancellation from any action.
@@ -86,6 +191,19 @@ export function useGame(): GameState & GameActions {
   const draw = isDraw(board);
   const gameOver = isTerminal(board);
   const winningLine = result?.line ?? [];
+
+  // ---- Persist state on every change ----
+
+  useEffect(() => {
+    saveState({
+      schemaVersion: SCHEMA_VERSION,
+      phase,
+      difficulty,
+      board: [...board],
+      isPlayerTurn,
+      scores,
+    });
+  }, [phase, difficulty, board, isPlayerTurn, scores]);
 
   // ---- Status and announcement derivation ----
 

@@ -9,6 +9,9 @@
   box-shadow:
     0 0 30px rgba(34, 211, 238, 0.05),
     0 4px 24px rgba(0, 0, 0, 0.4);
+  transition:
+    border-color var(--transition-med),
+    box-shadow var(--transition-med);
 }
 
 .board-row {
@@ -19,4 +22,24 @@
 
 .board-row > .cell {
   height: 96px;
+}
+
+/* ---- CPU thinking state ---- */
+
+.board-thinking {
+  border-color: var(--neon-magenta);
+  animation: thinking-glow 1.2s ease-in-out infinite;
+}
+
+@keyframes thinking-glow {
+  0%, 100% {
+    box-shadow:
+      0 0 16px var(--neon-magenta-glow),
+      0 4px 24px rgba(0, 0, 0, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 28px var(--neon-magenta-glow),
+      0 4px 24px rgba(0, 0, 0, 0.4);
+  }
 }

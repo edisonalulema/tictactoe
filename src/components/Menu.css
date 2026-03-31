@@ -1,0 +1,22 @@
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.menu-difficulty {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-legend {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 10px;
+}

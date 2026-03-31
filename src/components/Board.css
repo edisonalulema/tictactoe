@@ -1,0 +1,16 @@
+.board {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+
+.board-row {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  gap: 4px;
+}
+
+/* Cells within the board get a fixed height to form squares */
+.board-row > .cell {
+  height: 100px;
+}

@@ -1,0 +1,37 @@
+.cell {
+  font-size: 2.5rem;
+  font-weight: 700;
+  border: 2px solid #444;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-family: inherit;
+}
+
+.cell:hover:not(:disabled) {
+  background: #2a2a4a;
+}
+
+.cell:focus-visible {
+  outline: 2px solid #58a6ff;
+  outline-offset: -2px;
+}
+
+.cell:disabled {
+  cursor: default;
+}
+
+.cell.x {
+  color: #58a6ff;
+}
+
+.cell.o {
+  color: #f97583;
+}
+
+.cell.winning {
+  background: #2d4a2d;
+  color: #7ee787;
+  border-color: #7ee787;
+}

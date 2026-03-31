@@ -2,32 +2,89 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
+  padding: 8px 0;
 }
 
 .result-overlay:focus {
   outline: none;
 }
 
-.result-text {
+/* ---- Badge — icon circle above text ---- */
+
+.result-badge {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid currentColor;
+  animation: badge-appear 0.4s ease-out;
+}
+
+.result-badge.result-win {
+  color: var(--neon-green);
+  box-shadow: 0 0 20px var(--neon-green-glow);
+}
+
+.result-badge.result-loss {
+  color: var(--neon-red);
+  box-shadow: 0 0 20px var(--neon-red-glow);
+}
+
+.result-badge.result-draw {
+  color: var(--neon-amber);
+  box-shadow: 0 0 20px var(--neon-amber-glow);
+}
+
+.result-icon {
   font-size: 1.5rem;
-  font-weight: 700;
+  line-height: 1;
+}
+
+/* ---- Text ---- */
+
+.result-text {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   margin: 0;
 }
 
-.result-win {
-  color: #7ee787;
+.result-text.result-win {
+  color: var(--neon-green);
+  text-shadow: 0 0 16px var(--neon-green-glow);
 }
 
-.result-loss {
-  color: #f97583;
+.result-text.result-loss {
+  color: var(--neon-red);
+  text-shadow: 0 0 16px var(--neon-red-glow);
 }
 
-.result-draw {
-  color: #e0e0e0;
+.result-text.result-draw {
+  color: var(--neon-amber);
+  text-shadow: 0 0 16px var(--neon-amber-glow);
 }
+
+/* ---- Actions ---- */
 
 .result-actions {
   display: flex;
   gap: 12px;
+}
+
+/* ---- Entrance animation ---- */
+
+@keyframes badge-appear {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

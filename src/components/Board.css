@@ -1,16 +1,22 @@
 .board {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 4px;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow:
+    0 0 30px rgba(34, 211, 238, 0.05),
+    0 4px 24px rgba(0, 0, 0, 0.4);
 }
 
 .board-row {
   display: grid;
-  grid-template-columns: repeat(3, 100px);
-  gap: 4px;
+  grid-template-columns: repeat(3, 96px);
+  gap: 6px;
 }
 
-/* Cells within the board get a fixed height to form squares */
 .board-row > .cell {
-  height: 100px;
+  height: 96px;
 }

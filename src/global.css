@@ -4,49 +4,80 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
-  padding: 40px 20px;
+  gap: 24px;
+  padding: 48px 20px 64px;
+  width: 100%;
+  max-width: 480px;
 }
 
-h1 {
+/* ---- Title ---- */
+
+.game-title {
   margin: 0;
-  font-size: 2rem;
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  text-shadow: 0 0 20px var(--neon-cyan-glow), 0 0 40px rgba(34, 211, 238, 0.15);
 }
+
+/* ---- Status line ---- */
 
 .status {
-  font-size: 1.2rem;
+  font-size: 1rem;
+  font-weight: 500;
   min-height: 1.5em;
+  color: var(--text-muted);
+  letter-spacing: 0.01em;
 }
 
-/* ---- Shared button style ---- */
+/* ---- Shared button styles ---- */
 
 .action-btn {
-  padding: 10px 28px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  background: #58a6ff;
-  color: #0d1117;
-  font-weight: 600;
+  padding: 12px 32px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border: 2px solid var(--neon-cyan);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--neon-cyan);
   cursor: pointer;
-  transition: opacity 0.15s;
+  transition:
+    background var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .action-btn:hover {
-  opacity: 0.85;
+  background: rgba(34, 211, 238, 0.1);
+  box-shadow: 0 0 12px var(--neon-cyan-glow), inset 0 0 12px rgba(34, 211, 238, 0.05);
+}
+
+.action-btn:active {
+  transform: scale(0.97);
 }
 
 .action-btn:focus-visible {
-  outline: 2px solid #58a6ff;
-  outline-offset: 2px;
+  outline: 2px solid var(--neon-cyan);
+  outline-offset: 3px;
 }
 
 .action-btn-secondary {
-  background: transparent;
-  color: #e0e0e0;
-  border: 2px solid #444;
+  border-color: var(--border-mid);
+  color: var(--text-muted);
 }
 
 .action-btn-secondary:hover {
-  border-color: #666;
+  border-color: var(--text-muted);
+  background: rgba(148, 163, 184, 0.08);
+  box-shadow: none;
+}
+
+.action-btn-secondary:focus-visible {
+  outline-color: var(--text-muted);
 }

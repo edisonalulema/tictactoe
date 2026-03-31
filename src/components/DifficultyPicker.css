@@ -1,31 +1,46 @@
 .difficulty-picker {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .difficulty-option {
-  padding: 8px 20px;
-  font-size: 1rem;
-  font-weight: 600;
-  border: 2px solid #444;
-  border-radius: 6px;
-  background: #1a1a2e;
-  color: #e0e0e0;
+  padding: 10px 22px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius-md);
+  background: var(--bg-cell);
+  color: var(--text-muted);
   cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .difficulty-option:hover {
-  background: #2a2a4a;
+  background: var(--bg-elevated);
+  border-color: var(--border-mid);
+  color: var(--text-primary);
+}
+
+.difficulty-option:active {
+  transform: scale(0.96);
 }
 
 .difficulty-option:focus-visible {
-  outline: 2px solid #58a6ff;
+  outline: 2px solid var(--neon-cyan);
   outline-offset: 2px;
 }
 
 .difficulty-option.selected {
-  border-color: #58a6ff;
-  background: #1c2d4a;
-  color: #58a6ff;
+  border-color: var(--neon-cyan);
+  background: rgba(34, 211, 238, 0.08);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 12px var(--neon-cyan-glow);
 }

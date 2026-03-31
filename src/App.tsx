@@ -10,8 +10,8 @@ function App() {
   const game = useGame();
 
   return (
-    <div className="game">
-      <h1>Tic-Tac-Toe</h1>
+    <main className="game">
+      <h1 className="game-title">Tic-Tac-Toe</h1>
       <LiveAnnouncer message={game.announcement} />
       <p className="status">{game.status}</p>
 
@@ -43,7 +43,7 @@ function App() {
           onReturnToMenu={game.returnToMenu}
         />
       )}
-    </div>
+    </main>
   );
 }
 

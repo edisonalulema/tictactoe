@@ -1,37 +1,98 @@
 .cell {
-  font-size: 2.5rem;
-  font-weight: 700;
-  border: 2px solid #444;
-  background: #1a1a2e;
-  color: #e0e0e0;
-  cursor: pointer;
-  transition: background 0.15s;
-  font-family: inherit;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius-sm);
+  background: var(--bg-cell);
+  color: var(--text-dim);
+  cursor: default;
+  font-family: var(--font-mono);
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-med);
+  overflow: hidden;
 }
 
-.cell:hover:not(:disabled) {
-  background: #2a2a4a;
+/* ---- Mark ---- */
+
+.cell-mark {
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1;
+  transition: transform var(--transition-fast);
 }
+
+/* ---- Empty interactive cell ---- */
+
+.cell-empty {
+  cursor: pointer;
+}
+
+.cell-empty:hover {
+  background: var(--bg-elevated);
+  border-color: var(--border-mid);
+}
+
+.cell-empty:active .cell-mark {
+  transform: scale(0.9);
+}
+
+/* ---- Focus ---- */
 
 .cell:focus-visible {
-  outline: 2px solid #58a6ff;
+  outline: 2px solid var(--neon-cyan);
   outline-offset: -2px;
+  z-index: 1;
 }
 
-.cell:disabled {
-  cursor: default;
+/* ---- Player X ---- */
+
+.cell-x {
+  color: var(--player-x);
+  border-color: rgba(34, 211, 238, 0.2);
+  text-shadow: 0 0 8px var(--player-x-glow);
 }
 
-.cell.x {
-  color: #58a6ff;
+/* ---- Player O ---- */
+
+.cell-o {
+  color: var(--player-o);
+  border-color: rgba(244, 114, 182, 0.2);
+  text-shadow: 0 0 8px var(--player-o-glow);
 }
 
-.cell.o {
-  color: #f97583;
+/* ---- Winning cell ---- */
+
+.cell-winning {
+  border-color: var(--neon-green);
+  box-shadow: 0 0 14px var(--neon-green-glow), inset 0 0 14px rgba(74, 222, 128, 0.06);
+  animation: winning-pulse 1.6s ease-in-out infinite;
 }
 
-.cell.winning {
-  background: #2d4a2d;
-  color: #7ee787;
-  border-color: #7ee787;
+.cell-winning .cell-mark {
+  color: var(--neon-green);
+  text-shadow: 0 0 12px var(--neon-green-glow);
+}
+
+/* Star indicator — ensures winning state is communicated beyond color */
+.cell-win-indicator {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  font-size: 0.65rem;
+  color: var(--neon-green);
+  line-height: 1;
+  opacity: 0.8;
+}
+
+@keyframes winning-pulse {
+  0%, 100% {
+    box-shadow: 0 0 14px var(--neon-green-glow), inset 0 0 14px rgba(74, 222, 128, 0.06);
+  }
+  50% {
+    box-shadow: 0 0 24px var(--neon-green-glow), inset 0 0 20px rgba(74, 222, 128, 0.1);
+  }
 }

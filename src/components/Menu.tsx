@@ -16,8 +16,9 @@ export function Menu({ scores, difficulty, onStartGame }: MenuProps) {
       <ScoreBoard scores={scores} />
 
       <fieldset className="menu-difficulty">
-        <legend className="menu-legend">Select difficulty</legend>
+        <legend className="menu-legend">Select difficulty to play</legend>
         <DifficultyPicker selected={difficulty} onSelect={onStartGame} />
+        <p className="menu-hint">Click a difficulty to start</p>
       </fieldset>
     </div>
   );
